@@ -1,27 +1,18 @@
+
 flowchart LR
-  %% --- Frontend ---
-  subgraph Client["Browser / Frontend"]
-    A[React App<br/>(Vite, TypeScript)]
-  end
+    subgraph Client[Frontend]
+        A[React App]
+    end
 
-  %% --- Traefik proxy ---
-  subgraph Proxy["Traefik Reverse Proxy"]
-    T[Traefik]
-  end
+    subgraph Server[Backend]
+        B[FastAPI Service]
+    end
 
-  %% --- Backend ---
-  subgraph Backend["Backend API (FastAPI)"]
-    B[FastAPI Application]
-  end
+    subgraph Storage[Database]
+        P[(PostgreSQL)]
+    end
 
-  %% --- Database ---
-  subgraph Database["PostgreSQL Database"]
-    P[(PostgreSQL)]
-  end
-
-  %% --- Connections ---
-  A <--> T
-  T -->|"/api/*"| B
-  T -->|"/* (static files)"| A
-  B <--> P
+    A -->|HTTP JSON| B
+    B -->|SQL| P
+    A <-->|Static assets optional| B
 
