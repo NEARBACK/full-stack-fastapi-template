@@ -1,0 +1,27 @@
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant FE as Frontend
+    participant BE as Backend
+    participant DB as Database
+
+    U ->> FE: Open app
+    FE ->> BE: GET health or config
+    BE -->> FE: 200 ok
+
+    U ->> FE: Login form submit
+    FE ->> BE: POST auth login (credentials)
+    BE ->> DB: SELECT user by email
+    DB -->> BE: user row
+    BE -->> FE: 200 {access_token}
+
+    U ->> FE: Create item
+    FE ->> BE: POST items {data} Bearer token
+    BE ->> DB: INSERT item
+    DB -->> BE: ok
+    BE -->> FE: 201 {item}
+
+    FE ->> BE: GET items Bearer token
+    BE ->> DB: SELECT items by owner
+    DB -->> BE: rows
+    BE -->> FE: 200 [items]
